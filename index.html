@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>13 công thức tạo hình ảnh món ăn siêu đẹp với Gemini</title>
+  <meta name="description" content="Danh sách các công thức prompt chuyên sâu để tạo hình ảnh món ăn Việt Nam thực tế và nghệ thuật bằng Gemini." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --bg-soft: #11151d;
+      --panel: #131923;
+      --panel-2: #171f2c;
+      --text: #e8edf6;
+      --muted: #9aa7bb;
+      --line: rgba(255,255,255,.08);
+      --line-2: rgba(255,255,255,.12);
+      --accent: #8b5cf6;
+      --accent-2: #3b82f6;
+      --accent-3: #f97316;
+      --accent-4: #facc15;
+      --shadow: 0 10px 30px rgba(0,0,0,.3);
+      --sidebar-w: 320px;
+      --content-w: 820px;
+      --sticky-top: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Inter", system-ui, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(59,130,246,.08), transparent 24%),
+        radial-gradient(circle at top right, rgba(139,92,246,.08), transparent 28%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    img { max-width: 100%; display: block; }
+
+    .skip-link {
+      position: absolute;
+      left: 16px;
+      top: -48px;
+      background: #fff;
+      color: #000;
+      padding: 10px 14px;
+      border-radius: 10px;
+      z-index: 1000;
+      transition: top .2s ease;
+    }
+    .skip-link:focus { top: 16px; }
+
+    .mobile-bar {
+      display: none;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: 14px 16px;
+      background: rgba(11,13,18,.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .mobile-title {
+      min-width: 0;
+      font-size: 14px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .menu-btn {
+      border: 1px solid var(--line-2);
+      background: var(--panel);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 12px;
+      cursor: pointer;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100vh;
+      padding: 24px 20px 20px;
+      border-right: 1px solid var(--line);
+      background: rgba(12,16,23,.85);
+      backdrop-filter: blur(12px);
+      overflow-y: auto;
+    }
+
+    .brand, .toc, .sidebar-note, .hero-card, .footer-note, .placeholder-figure, .callout, .mini-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.02);
+    }
+
+    .brand { padding: 18px; margin-bottom: 18px; }
+    .eyebrow, .section-label, .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      border-radius: 999px;
+      padding: 7px 11px;
+    }
+
+    .eyebrow {
+      color: #c8d3e4;
+      background: rgba(139,92,246,.14);
+      border: 1px solid rgba(139,92,246,.28);
+      margin-bottom: 12px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 800;
+    }
+
+    .brand p, .sidebar-note {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .toc { padding: 12px; }
+    .toc-title {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #c8d3e4;
+      margin: 4px 0 12px;
+      padding: 0 6px;
+    }
+
+    .toc ul { list-style: none; margin: 0; padding: 0; }
+    .toc li + li { margin-top: 6px; }
+
+    .toc a {
+      display: grid;
+      grid-template-columns: 28px minmax(0,1fr);
+      gap: 10px;
+      padding: 10px;
+      border-radius: 12px;
+      color: #c7d0df;
+      border: 1px solid transparent;
+    }
+
+    .toc a.active {
+      background: linear-gradient(90deg, rgba(139,92,246,.18), rgba(59,130,246,.12));
+      border-color: rgba(139,92,246,.32);
+      color: #fff;
+    }
+
+    .toc-num, .section-index {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      color: #fff;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    }
+
+    .toc-num {
+      width: 28px;
+      height: 28px;
+      font-size: 12px;
+    }
+
+    .toc-text {
+      font-size: 14px;
+      line-height: 1.45;
+      padding-top: 2px;
+    }
+
+    .sidebar-note {
+      margin-top: 18px;
+      padding: 14px;
+      border-style: dashed;
+    }
+
+    .main { min-width: 0; padding: 28px 32px 80px; }
+    .content { max-width: var(--content-w); margin: 0 auto; }
+
+    .hero { padding: 30px 0 18px; }
+    .hero-card {
+      padding: 28px 26px 24px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)),
+        linear-gradient(135deg, rgba(139,92,246,.08), rgba(59,130,246,.04));
+    }
+
+    .hero-badge {
+      color: #fff;
+      background: linear-gradient(135deg, rgba(249,115,22,.25), rgba(250,204,21,.18));
+      border: 1px solid rgba(249,115,22,.26);
+      margin-bottom: 16px;
+    }
+
+    .hero h2 {
+      margin: 0;
+      font-size: clamp(34px, 6vw, 48px);
+      line-height: 1.05;
+      font-weight: 800;
+      letter-spacing: -.03em;
+      background: linear-gradient(135deg, #fff 0%, #fef08a 18%, #fb923c 52%, #f43f5e 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-lead {
+      margin: 18px 0 0;
+      max-width: 760px;
+      font-size: 16px;
+      color: #c7d0df;
+      line-height: 1.85;
+    }
+
+    .sticky-hero {
+      position: sticky;
+      top: var(--sticky-top);
+      z-index: 20;
+      margin: 24px 0 18px;
+      pointer-events: none;
+    }
+
+    .sticky-hero-inner {
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(19,25,35,.86);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--line);
+    }
+
+    .sticky-kicker {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #aab7ca;
+      margin-bottom: 3px;
+    }
+
+    .sticky-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #eef3fb;
+      line-height: 1.35;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .section-index {
+      min-width: 36px;
+      height: 36px;
+      font-size: 13px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.1);
+    }
+
+    section.report-section {
+      padding: 48px 0 12px;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+      scroll-margin-top: 92px;
+    }
+
+    .section-label {
+      background: rgba(59,130,246,.12);
+      border: 1px solid rgba(59,130,246,.2);
+      color: #d9e8ff;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      margin: 0 0 16px;
+      font-size: 28px;
+      line-height: 1.2;
+      font-weight: 800;
+      letter-spacing: -.02em;
+      color: #f5f8fe;
+    }
+
+    pre {
+      margin: 20px 0;
+      padding: 20px;
+      overflow-x: auto;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: #0f141d;
+      color: #f3f6fb;
+      font-size: 14px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .back-to-top {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 60;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(8px);
+      transition: opacity .2s ease, transform .2s ease, visibility .2s ease;
+      border: 1px solid var(--line-2);
+      background: rgba(19,25,35,.92);
+      color: #fff;
+      border-radius: 999px;
+      padding: 12px 16px;
+      cursor: pointer;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.5);
+      z-index: 39;
+    }
+
+    .overlay.show { display: block; }
+
+    @media (max-width: 900px) {
+      .mobile-bar { display: flex; }
+      .layout { display: block; }
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: min(88vw, 340px);
+        height: 100vh;
+        z-index: 40;
+        transform: translateX(-100%);
+        transition: transform .24s ease;
+      }
+      .sidebar.open { transform: translateX(0); }
+      .main { padding: 18px 18px 72px; }
+      .sticky-hero { top: 70px; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Đi tới nội dung</a>
+
+  <div class="mobile-bar">
+    <button class="menu-btn" id="menuBtn" aria-label="Mở mục lục" aria-expanded="false" aria-controls="sidebarNav">☰ Mục lục</button>
+    <div class="mobile-title">13 Công thức tạo hình ảnh món ăn</div>
+  </div>
+
+  <div class="overlay" id="overlay" aria-hidden="true"></div>
+
+  <div class="layout">
+    <aside class="sidebar" id="sidebarNav" aria-label="Thanh điều hướng">
+      <div class="brand">
+        <div class="eyebrow">Hướng dẫn sử dụng</div>
+        <h1>13 công thức tạo hình ảnh món ăn siêu đẹp với Gemini</h1>
+        <p>Bộ sưu tập các prompt chuyên nghiệp giúp tạo ra hình ảnh ẩm thực Việt Nam 8K siêu thực.</p>
+      </div>
+
+      <nav class="toc" aria-label="Mục lục chính">
+        <div class="toc-title">Mục lục</div>
+        <ul>
+          <li><a href="#banh-mi"><span class="toc-num">01</span> <span class="toc-text">Bánh mì</span></a></li>
+          <li><a href="#com-tam"><span class="toc-num">02</span> <span class="toc-text">Cơm tấm Sài Gòn</span></a></li>
+          <li><a href="#goi-cuon"><span class="toc-num">03</span> <span class="toc-text">Gỏi cuốn</span></a></li>
+          <li><a href="#bun-cha"><span class="toc-num">04</span> <span class="toc-text">Bún chả Hà Nội</span></a></li>
+          <li><a href="#pho-bo"><span class="toc-num">05</span> <span class="toc-text">Phở bò</span></a></li>
+          <li><a href="#bun-bo-hue"><span class="toc-num">06</span> <span class="toc-text">Bún bò Huế</span></a></li>
+          <li><a href="#bun-rieu"><span class="toc-num">07</span> <span class="toc-text">Bún Riêu Cua</span></a></li>
+          <li><a href="#bun-quay"><span class="toc-num">08</span> <span class="toc-text">Bún Quậy</span></a></li>
+          <li><a href="#my-quang"><span class="toc-num">09</span> <span class="toc-text">Mỳ Quảng</span></a></li>
+          <li><a href="#pha-lau"><span class="toc-num">10</span> <span class="toc-text">Phá Lấu Bò</span></a></li>
+          <li><a href="#hu-tieu"><span class="toc-num">11</span> <span class="toc-text">Hủ Tiếu Nam Vang</span></a></li>
+          <li><a href="#bo-kho"><span class="toc-num">12</span> <span class="toc-text">Bò Kho</span></a></li>
+          <li><a href="#com-ga"><span class="toc-num">13</span> <span class="toc-text">Cơm Gà Xối Mỡ</span></a></li>
+        </ul>
+      </nav>
+
+      <div class="sidebar-note">Lưu ý: Các công thức được tối ưu cho độ phân giải 8K và hiệu ứng ánh sáng Cinematic.</div>
+    </aside>
+
+    <main class="main" id="main-content">
+      <div class="content">
+        <header class="hero">
+          <div class="hero-card">
+            <div class="hero-badge">Gemini Food Photography</div>
+            <h2>13 công thức tạo hình ảnh món ăn siêu đẹp với Gemini</h2>
+            <p class="hero-lead">Chuyển đổi các món ăn truyền thống Việt Nam thành các tác phẩm nghệ thuật đồ họa Infographic siêu thực với các prompt chi tiết dưới đây.</p>
+          </div>
+        </header>
+
+        <div class="sticky-hero">
+          <div class="sticky-hero-inner">
+            <div>
+              <div class="sticky-kicker">Đang xem</div>
+              <div class="sticky-title" id="stickyTitle">Bánh mì</div>
+            </div>
+            <div class="section-index" id="stickyIndex">01</div>
+          </div>
+        </div>
+
+        <div class="prose">
+          <section class="report-section" id="banh-mi" data-title="Bánh mì" data-index="01">
+            <div class="section-label">Công thức 01</div>
+            <h3 class="section-title">1. Bánh mì</h3>
+            <pre><code>Create a hyper-realistic food infographic photograph of a classic Vietnamese Bánh Mì. A crispy, golden-brown Vietnamese baguette, sliced open, is anchored at the bottom center of the frame. All key ingredients float and levitate vertically above in a vibrant vertical composition with gravity-defying motion. Floating ingredients include: A generous layer of pork pâté (Patê), Vietnamese ham (Chả lụa), slices of marinated grilled pork (Thịt nướng), crispy cucumber strips (Dưa leo), pickled carrot and daikon (Đồ chua), fresh cilantro sprigs (Ngò rí), slices of fresh red chili (Ớt xắt), a drizzle of mayonnaise (Bơ trứng / Mayonnaise), and a splash of Maggi seasoning (Nước tương). Each ingredient is motion-frozen mid-air with realistic physics. A bustling Vietnamese street food market background, blurred (bokeh). Thin white pointing lines connect each floating ingredient to a clear Vietnamese text label in editorial infographic style. Cinematic lighting with warm, energetic daylight tones, emphasis on the extreme crustiness of the bread and fresh colors of the vegetables, shallow depth of field. Ultra-detailed textures on the pâté, grilled meat and crispy vegetables, DSLR look, 8K ultra-realistic resolution.</code></pre>
+          </section>
+
+          <section class="report-section" id="com-tam" data-title="Cơm tấm Sài Gòn" data-index="02">
+            <div class="section-label">Công thức 02</div>
+            <h3 class="section-title">2. Cơm tấm Sài Gòn</h3>
+            <pre><code>Create a hyper-realistic food infographic photograph of Vietnamese Cơm Tấm. A central plate of broken rice topped with scallion oil (Mỡ hành) is anchored at the bottom center of the frame. All key toppings float and levitate vertically above in a rich, chaotic yet organized composition with gravity-defying motion. Floating ingredients include: A large, marinated glazed grilled pork chop (Sườn nướng), a wedge of steamed pork and egg meatloaf (Chả trứng), thin shredded pork skin dusted with roasted rice powder (Bì), a sunny-side-up fried egg (Trứng ốp la) with a runny yolk, pickled carrot and daikon (Đồ chua), fresh cucumber (Dưa leo) and tomato slices (Cà chua), and a small bowl of thick sweet & sour fish sauce with minced chili (Nước mắm chua ngọt). Each ingredient is motion-frozen mid-air with realistic physics. Dark rustic wood table below, blurred outdoor market background. Thin white pointing lines connect each floating ingredient to a clear Vietnamese text label in editorial infographic style. Cinematic studio lighting with warm golden hour tones, emphasizing the glaze on the meat and bright yellow egg yolk, dramatic steam effect. Ultra-detailed textures on the grilled meat, texture of broken rice and egg, DSLR look, 8K ultra-realistic resolution.</code></pre>
+          </section>
+
+          <section class="report-section" id="goi-cuon" data-title="Gỏi cuốn" data-index="03">
+            <div class="section-label">Công thức 03</div>
+            <h3 class="section-title">3. Gỏi cuốn</h3>
+            <pre><code>Create a hyper-realistic food infographic photograph of fresh Vietnamese Gỏi Cuốn. A serving platter with fresh spring rolls and a bowl of peanut hoisin dipping sauce topped with crushed peanuts (Tương đậu) is anchored at the bottom center of the frame. All key raw ingredients float and levitate vertically above in a vibrant, clean composition with gravity-defying motion. Floating ingredients include: Translucent rice paper wrappers (Bánh tráng), poached prawns halved longitudinally (Tôm luộc), slices of pork belly (Thịt ba chỉ), a neat bundle of rice vermicelli (Bún tươi), long fresh chives sticking out (Cọng hẹ), mint leaves (Húng lủi), and lettuce leaves (Xà lách). Each ingredient is motion-frozen mid-air with realistic physics, some rice papers showing translucent properties. Rustic stone surface below, soft natural daylight gradient background. Thin white pointing lines connect each floating ingredient to a clear Vietnamese text label in editorial infographic style. Cinematic studio lighting with bright, fresh daylight tones, shallow depth of field. Ultra-detailed textures on the moist prawns, fresh vegetables and translucent rice paper, DSLR look, 8K ultra-realistic resolution.</code></pre>
+          </section>
+
+          <section class="report-section" id="bun-cha" data-title="Bún chả Hà Nội" data-index="04">
+            <div class="section-label">Công thức 04</div>
+            <h3 class="section-title">4. Bún chả Hà Nội</h3>
+            <pre><code>Create a hyper-realistic food infographic photograph of authentic Vietnamese Bún Chả Hà Nội. A central ceramic bowl containing the savory sweet-sour dipping sauce (Nước chấm) with floating crisp green papaya and carrot slices (Đồ chua) is anchored at the bottom center of the frame. All key components float and levitate vertically above in a clean, sophisticated composition. Floating ingredients include: Succulent charcoal-grilled pork patties (Chả viên), slices of grilled pork belly (Chả miếng), a neat nest of fine rice vermicelli (Bún tươi), a platter of fresh authentic herbs including Vietnamese balm and perilla leaves (Rau sống: kinh giới, tía tô, xà lách), minced garlic (Tỏi băm), minced red chili (Ớt băm), and a lime wedge (Chanh). Each ingredient is motion-frozen mid-air with realistic physics. Rustic metallic table below, deep neutral background. Thin white pointing lines connect each floating ingredient to a clear Vietnamese text label in editorial infographic style. Cinematic lighting with warm tones, dramatic smoke effects and sizzle trails rising from the grilled meat, shallow depth of field. Ultra-detailed textures on the charred meat, glossy sauce and delicate herbs, DSLR look, 8K ultra-realistic resolution.</code></pre>
+          </section>
+
+          <section class="report-section" id="pho-bo" data-title="Phở bò" data-index="05">
+            <div class="section-label">Công thức 05</div>
+            <h3 class="section-title">5. Phở bò</h3>
+            <pre><code>Create a hyper-realistic food infographic photograph of a bowl of traditional Vietnamese Phở Bò. A steaming ceramic bowl filled with Phở noodles is anchored at the bottom center of the frame. All key ingredients float and levitate vertically above in a clean, elegant composition with gravity-defying motion. Floating ingredients include: Thin slices of rare beef (Thịt bò tái), flank beef (Thịt bò nạm), a neat bundle of soft rice noodles (Bánh phở), fresh sawtooth coriander (Ngò gai), chopped green onions (Hành lá), Thai basil sprigs (Húng quế), bean sprouts (Giá đỗ), thin lime wedges (Chanh), fresh red chili slices (Ớt xắt), and a dash of black pepper (Tiêu đen). Each ingredient is motion-frozen mid-air with realistic physics. Rustic dark wood table below, deep dramatic gradient background. Thin white pointing lines connect each floating ingredient to a clear Vietnamese text label in editorial infographic style. Cinematic studio lighting with warm tones, intense steam and aromatic trails rising from the bowl and floating ingredients, shallow depth of field. Ultra-detailed textures on the juicy meat, translucent noodles and vibrant herbs, DSLR look, 8K ultra-realistic resolution.</code></pre>
+          </section>
+
+          <section class="report-section" id="bun-bo-hue" data-title="Bún bò Huế" data-index="06">
+            <div class="section-label">Công thức 06</div>
+            <h3 class="section-title">6. Bún bò Huế</h3>
+            <pre><code>Create a hyper-realistic food infographic photograph of a steaming bowl of Bún Bò Huế (Hue Spicy Beef Noodle Soup). A traditional deep ceramic bowl is anchored at the bottom center. All core components levitate vertically above the bowl in a dynamic, gravity-defying vertical composition. Floating ingredients include: thick white rice vermicelli noodles (Bún), tender slices of beef shank (Nạm bò), a large piece of slow-cooked pork knuckle (Giò heo), cubes of congealed pig’s blood (Huyết), slices of Vietnamese ham (Chả lụa/Chả cua), fresh split water spinach (Rau muống chẻ), banana blossoms (Bắp chuối), fresh mint, and stalks of lemongrass. A vibrant splash of spicy red lemongrass chili oil (Sa tế) and aromatic broth droplets are frozen mid-air with realistic fluid physics. Background is a blurred (bokeh) traditional wooden Hue-style restaurant interior. Thin white pointing lines connect each ingredient to a clear Vietnamese text label in editorial infographic style. Cinematic lighting with warm, golden-hour tones, highlighting the steam rising and the oily red sheen of the broth. Ultra-detailed textures on the meat fibers and fresh herbs, DSLR look, 8K resolution.</code></pre>
+          </section>
+
+          <section class="report-section" id="bun-rieu" data-title="Bún Riêu Cua" data-index="07">
+            <div class="section-label">Công thức 07</div>
+            <h3 class="section-title">7. Bún Riêu Cua</h3>
+            <pre><code>Create a hyper-realistic food infographic photograph of Vietnamese Bún Riêu Cua. A steaming bowl of vibrant red-orange tomato broth is anchored at the bottom center of the frame. All key ingredients float and levitate vertically above in a vibrant, complex composition. Floating ingredients include: Rice vermicelli noodles (Bún Tươi), chunks of fluffy minced freshwater crab meat patty (Riêu Cua), deep-fried puffy tofu cubes (Đậu Hũ Chiên), soft tomato wedges (Cà Chua), congealed pork blood cubes (Huyết), thinly sliced curled banana blossom (Bắp Chuối Bào), and fresh perilla leaves (Tía Tô). Each ingredient is motion-frozen mid-air. Dark rustic table below, blurred moody background. Thin white pointing lines connect each floating ingredient to a clear Vietnamese text label in editorial infographic style. Cinematic lighting, warm red tones, intense steam, DSLR, 8K ultra-realistic resolution.</code></pre>
+          </section>
+
+          <section class="report-section" id="bun-quay" data-title="Bún Quậy" data-index="08">
+            <div class="section-label">Công thức 08</div>
+            <h3 class="section-title">8. Bún Quậy</h3>
+            <pre><code>Create a hyper-realistic food infographic photograph of Phu Quoc Bún Quậy. A simple ceramic bowl of clear hot broth is anchored at the bottom center of the frame. All key components float and levitate vertically above in a clean, sea-fresh composition. Floating ingredients include: Freshly pressed white rice noodles (Bún Tươi), raw shrimp paste transforming into cooked patty (Chả Tôm), fish paste (Chả Cá), thin rings of fresh squid (Mực Tươi), finely chopped scallions (Hành Lá), and a dynamic splash of vigorous stirred dipping sauce made of salt, sugar, chili, and kumquat (Nước Chấm Quậy). Each ingredient is motion-frozen mid-air. Rustic wooden table below, dark gradient background. Thin white pointing lines connect each floating ingredient to a clear Vietnamese text label in editorial infographic style. Cinematic lighting, bright daylight tones, subtle steam, DSLR, 8K ultra-realistic.</code></pre>
+          </section>
+
+          <section class="report-section" id="my-quang" data-title="Mỳ Quảng" data-index="09">
+            <div class="section-label">Công thức 09</div>
+            <h3 class="section-title">9. Mỳ Quảng</h3>
+            <pre><code>Create a hyper-realistic food infographic photograph of authentic Vietnamese Mỳ Quảng. A steaming bowl of rich turmeric-infused broth is anchored at the bottom center. Floating ingredients levitating vertically include: Wide turmeric-yellow rice noodles (Mỳ Quảng), succulent poached prawns (Tôm Luộc), sliced pork belly (Thịt Xá Xíu), crushed roasted peanuts (Đậu Phộng Rang), broken pieces of baked rice cracker (Bánh Tráng Nướng), whole quail eggs (Trứng Cút), and fresh authentic herbs including banana blossom and perilla (Rau Sống). Each ingredient is motion-frozen mid-air with realistic physics. Rustic dark wood table, deep neutral background. Thin white pointing lines connect each floating ingredient to a clear Vietnamese text label in editorial infographic style. Cinematic studio lighting, warm tones, intense steam, DSLR look, 8K ultra-realistic.</code></pre>
+          </section>
+
+          <section class="report-section" id="pha-lau" data-title="Phá Lấu Bò" data-index="10">
+            <div class="section-label">Công thức 10</div>
+            <h3 class="section-title">10. Phá Lấu Bò</h3>
+            <pre><code>Create a hyper-realistic food infographic photograph of authentic Vietnamese Phá Lấu Bò. A steaming small bowl of rich, coconut-infused spiced beef offal stew is anchored at the bottom center. Floating ingredients levitating vertically include: Chewy pieces of beef tripe (Lá Sách Bò), tender beef intestines (Phèo Bò), beef liver (Gan Bò), honeycomb tripe (Tổ Ong), fresh Vietnamese coriander leaves (Rau Răm), a torn piece of crispy baguette (Bánh Mì), and a dynamic splash of sweet-sour tamarind sauce (Nước Mắm Me). Each ingredient is motion-frozen mid-air. Rustic metallic table, dark background. Thin white pointing lines connect each floating ingredient to a clear Vietnamese text label in editorial infographic style. Cinematic lighting, dramatic steam, 8K ultra-realistic.</code></pre>
+          </section>
+
+          <section class="report-section" id="hu-tieu" data-title="Hủ Tiếu Nam Vang" data-index="11">
+            <div class="section-label">Công thức 11</div>
+            <h3 class="section-title">11. Hủ Tiếu Nam Vang</h3>
+            <pre><code>Create a hyper-realistic food infographic photograph of authentic Vietnamese Hủ Tiếu Nam Vang. A steaming bowl of clear pork broth is anchored at the bottom center. Floating ingredients levitating vertically include: Chewy clear tapioca noodles (Sợi Hủ Tiếu), a cluster of savory minced pork (Thịt Băm), slices of boiled pork (Thịt Heo Luộc), poached peeled prawns (Tôm Luộc), quail eggs (Trứng Cút), pieces of pork liver (Gan Heo), crispy golden fried garlic (Tỏi Phi), and fresh garlic chives (Hẹ). Each ingredient is motion-frozen mid-air. Rustic wood table, deep background. Thin white pointing lines connect each floating ingredient to a clear Vietnamese text label in editorial infographic style. Cinematic studio lighting, intense steam, DSLR look, 8K ultra-realistic.</code></pre>
+          </section>
+
+          <section class="report-section" id="bo-kho" data-title="Bò Kho" data-index="12">
+            <div class="section-label">Công thức 12</div>
+            <h3 class="section-title">12. Bò Kho</h3>
+            <pre><code>Create a hyper-realistic food infographic photograph of Vietnamese Bò Kho. A bowl containing rich, vibrant orange-red beef stew is anchored at the bottom center. Floating ingredients levitating vertically include: Tender chunks of beef shank (Thịt Bò Nạm), translucent pieces of beef tendon (Gân Bò), star-shaped thick carrot slices (Cà Rốt), bruised lemongrass stalks (Sả Cây), fresh Thai basil sprigs (Húng Quế), sawtooth coriander (Ngò Gai), and a crispy torn piece of Vietnamese baguette (Bánh Mì). Each ingredient is motion-frozen mid-air. Rustic table, dark background. Thin white pointing lines connect each floating ingredient to a clear Vietnamese text label in editorial infographic style. Cinematic lighting, dramatic steam, 8K ultra-realistic.</code></pre>
+          </section>
+
+          <section class="report-section" id="com-ga" data-title="Cơm Gà Xối Mỡ" data-index="13">
+            <div class="section-label">Công thức 13</div>
+            <h3 class="section-title">13. Cơm Gà Xối Mỡ</h3>
+            <pre><code>Create a hyper-realistic food infographic photograph of Vietnamese Cơm Gà Xối Mỡ. A plate of golden fried rice is anchored at the bottom center. Floating ingredients levitating vertically include: A crispy, juicy deep-fried chicken leg (Đùi Gà Chiên), golden fried rice grains (Cơm Vàng), a splash of savory soy sauce (Xì Dầu), a drizzle of chili sauce (Tương Ớt), fresh cucumber slices (Dưa Leo), tomato slices (Cà Chua), pickled vegetables (Đồ Chua), and crispy fried garlic flakes (Tỏi Phi). Each ingredient is motion-frozen mid-air. Dark wood table, neutral gradient background. Thin white pointing lines connect each floating ingredient to a clear Vietnamese text label in editorial infographic style. Cinematic lighting, dramatic steam, 8K ultra-realistic.</code></pre>
+          </section>
+        </div>
+      </div>
+      <footer style="text-align: center; margin-top: 64px; padding: 32px 0; border-top: 1px solid rgba(255,255,255,.05);">
+        <p style="font-size: 14px; color: #7a8ba0;">© 2026 AI Insight Report. Generated formatting via Tony Bui - Master AI.</p>
+      </footer>
+    </main>
+  </div>
+
+  <button class="back-to-top" id="backToTop" aria-label="Lên đầu trang">↑ Lên đầu trang</button>
+
+  <script>
+    (function () {
+      const sidebar = document.getElementById('sidebarNav');
+      const menuBtn = document.getElementById('menuBtn');
+      const overlay = document.getElementById('overlay');
+      const backToTop = document.getElementById('backToTop');
+      const tocLinks = Array.from(document.querySelectorAll('.toc a'));
+      const sections = Array.from(document.querySelectorAll('.report-section'));
+      const stickyTitle = document.getElementById('stickyTitle');
+      const stickyIndex = document.getElementById('stickyIndex');
+
+      function openSidebar() {
+        if (!sidebar || !overlay || !menuBtn) return;
+        sidebar.classList.add('open');
+        overlay.classList.add('show');
+        menuBtn.setAttribute('aria-expanded', 'true');
+      }
+
+      function closeSidebar() {
+        if (!sidebar || !overlay || !menuBtn) return;
+        sidebar.classList.remove('open');
+        overlay.classList.remove('show');
+        menuBtn.setAttribute('aria-expanded', 'false');
+      }
+
+      if (menuBtn) {
+        menuBtn.addEventListener('click', function () {
+          if (sidebar.classList.contains('open')) closeSidebar();
+          else openSidebar();
+        });
+      }
+
+      if (overlay) overlay.addEventListener('click', closeSidebar);
+
+      tocLinks.forEach(function (link) {
+        link.addEventListener('click', function () {
+          if (window.innerWidth <= 900) closeSidebar();
+        });
+      });
+
+      function setActiveSection() {
+        if (!sections.length) return;
+        let current = sections[0];
+
+        for (const section of sections) {
+          const rect = section.getBoundingClientRect();
+          if (rect.top <= 140) current = section;
+        }
+
+        const currentId = current.id;
+        const currentTitle = current.getAttribute('data-title') || '';
+        const currentIndex = current.getAttribute('data-index') || '';
+
+        tocLinks.forEach(function (link) {
+          const isActive = link.getAttribute('href') === '#' + currentId;
+          link.classList.toggle('active', isActive);
+        });
+
+        if (stickyTitle) stickyTitle.textContent = currentTitle;
+        if (stickyIndex) stickyIndex.textContent = currentIndex;
+      }
+
+      function toggleBackToTop() {
+        if (!backToTop) return;
+        if (window.scrollY > 500) backToTop.classList.add('show');
+        else backToTop.classList.remove('show');
+      }
+
+      window.addEventListener('scroll', function () {
+        setActiveSection();
+        toggleBackToTop();
+      }, { passive: true });
+
+      window.addEventListener('resize', function () {
+        if (window.innerWidth > 900) closeSidebar();
+      });
+
+      if (backToTop) {
+        backToTop.addEventListener('click', function () {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      setActiveSection();
+      toggleBackToTop();
+    })();
+  </script>
+</body>
+</html>
